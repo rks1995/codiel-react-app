@@ -4,7 +4,7 @@ const customFetch = async (url, { body, ...customConfig }) => {
   const token = window.localStorage.getItem(LOCALSTORAGE_TOKEN_KEY)
 
   const headers = {
-    'content-type': 'application/json',
+    'content-json': 'application/json',
     Accept: 'application/json',
   }
 
@@ -14,7 +14,7 @@ const customFetch = async (url, { body, ...customConfig }) => {
 
   const config = {
     ...customConfig,
-    header: {
+    headers: {
       ...headers,
       ...customConfig.headers,
     },
@@ -34,6 +34,7 @@ const customFetch = async (url, { body, ...customConfig }) => {
         success: true,
       }
     }
+
     throw new Error(data.message)
   } catch (error) {
     console.error('error')
@@ -46,7 +47,7 @@ const customFetch = async (url, { body, ...customConfig }) => {
 
 const getPosts = (page = 1, limit = 3) => {
   const url = API_URLS.posts(page, limit)
-  return customFetch(url, { method: 'GET' })
+  return customFetch(url, { method: 'get' })
 }
 
 export { getPosts }
