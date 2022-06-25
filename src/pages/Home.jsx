@@ -1,6 +1,8 @@
 import styles from '../styles/home.module.css'
 import PropTypes from 'prop-types'
 
+import Comments from '../components/Comments'
+
 const Home = ({ posts }) => {
   return (
     <div className={styles.postsList}>
@@ -43,25 +45,7 @@ const Home = ({ posts }) => {
 
               <div className={styles.postCommentsList}>
                 {post.comments.map((comment) => {
-                  return (
-                    <div key={comment._id} className={styles.postCommentsItem}>
-                      <div className={styles.postCommentHeader}>
-                        <span className={styles.postCommentAuthor}>
-                          {comment.user.name}
-                        </span>
-                        <span className={styles.postCommentTime}>
-                          a minute ago
-                        </span>
-                        <span className={styles.postCommentLikes}>
-                          {comment.likes.length}
-                        </span>
-                      </div>
-
-                      <div className={styles.postCommentContent}>
-                        {comment.content}
-                      </div>
-                    </div>
-                  )
+                  return <Comments key={comment._id} comment={comment} />
                 })}
               </div>
             </div>

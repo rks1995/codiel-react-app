@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getPosts } from '../api'
 import { Home } from '../pages'
-import Loader from './Loader'
+import { Loader, Navbar } from './'
 
 function App() {
   const [posts, setPosts] = useState([])
@@ -20,7 +20,7 @@ function App() {
   }
   return (
     <div className='App'>
-      <h1>Codial app</h1>
+      <Navbar />
       <Home posts={posts.posts} />
     </div>
   )
