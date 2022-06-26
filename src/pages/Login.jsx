@@ -1,22 +1,30 @@
 import styles from '../styles/login.module.css'
 import { useFormInput } from '../hooks'
 import { useState } from 'react'
+import { useAuth } from '../hooks/useProvideAuth'
 import toast from 'react-hot-toast'
 
 const Login = () => {
   const email = useFormInput('')
   const password = useFormInput('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-  const handleSubmit = (e) => {
+  const auth = useAuth()
+  console.log(auth)
+  const handleSubmit = async (e) => {
     e.preventDefault()
-
+    setIsLoggedIn(true)
     if (!email.value || !password.value) {
       return toast.error('Invalid credential')
     }
-    setIsLoggedIn(true)
-  }
+    const response = await auth.login(email.value, password.value)
 
+    if (response.success) {
+      toast.success(response.message)
+    } else {
+      toast.error(response.message)
+    }
+    setIsLoggedIn(false)
+  }
   return (
     <form className={styles.loginForm} onSubmit={handleSubmit}>
       <span className={styles.loginSignupHeader}>Login</span>
@@ -32,7 +40,9 @@ const Login = () => {
         />
       </div>
       <div className={styles.field}>
-        <button>{isLoggedIn ? 'Logging in...' : 'Log In'}</button>
+        <button disabled={isLoggedIn}>
+          {isLoggedIn ? 'Logging in...' : 'Log In'}
+        </button>
       </div>
     </form>
   )

@@ -1,11 +1,10 @@
-import { API_URLS, LOCALSTORAGE_TOKEN_KEY } from '../utils'
+import { API_URLS, LOCALSTORAGE_TOKEN_KEY, getFormBody } from '../utils'
 
 const customFetch = async (url, { body, ...customConfig }) => {
   const token = window.localStorage.getItem(LOCALSTORAGE_TOKEN_KEY)
 
   const headers = {
-    'content-json': 'application/json',
-    Accept: 'application/json',
+    'content-json': 'application/x-www-form-urlencoded',
   }
 
   if (token) {
@@ -21,7 +20,7 @@ const customFetch = async (url, { body, ...customConfig }) => {
   }
 
   if (body) {
-    config.body = JSON.stringify(body)
+    config.body = getFormBody(body)
   }
 
   try {
@@ -50,4 +49,11 @@ const getPosts = (page = 1, limit = 3) => {
   return customFetch(url, { method: 'get' })
 }
 
-export { getPosts }
+const loginUser = (email, password) => {
+  return customFetch(API_URLS.login(), {
+    method: 'post',
+    body: { email, password },
+  })
+}
+
+export { getPosts, loginUser }
