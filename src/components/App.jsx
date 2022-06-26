@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 import { getPosts } from '../api'
-import { Home } from '../pages'
+import { Home, Login } from '../pages'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Loader, Navbar } from './'
+
+const Page404 = () => {
+  return <div>page404</div>
+}
 
 function App() {
   const [posts, setPosts] = useState([])
@@ -20,8 +25,14 @@ function App() {
   }
   return (
     <div className='App'>
-      <Navbar />
-      <Home posts={posts.posts} />
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<Home posts={posts.posts} />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='*' element={<Page404 />} />
+        </Routes>
+      </Router>
     </div>
   )
 }
