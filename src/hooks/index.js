@@ -1,4 +1,4 @@
 import useFormInput from './useFormInput'
-import useProvideAuth from './useProvideAuth'
+import { useAuth, useProvideAuth } from './useProvideAuth'
 
-export { useFormInput, useProvideAuth }
+export { useFormInput, useProvideAuth, useAuth }

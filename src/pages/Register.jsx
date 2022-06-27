@@ -2,7 +2,7 @@ import styles from '../styles/login.module.css'
 import { useFormInput } from '../hooks'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
-import { useAuth } from '../hooks/useProvideAuth'
+import { useAuth } from '../hooks'
 import { useNavigate } from 'react-router-dom'
 
 const Register = () => {

@@ -1,7 +1,7 @@
 import styles from '../styles/login.module.css'
 import { useFormInput } from '../hooks'
 import { useState } from 'react'
-import { useAuth } from '../hooks/useProvideAuth'
+import { useAuth } from '../hooks'
 import toast from 'react-hot-toast'
 
 const Login = () => {

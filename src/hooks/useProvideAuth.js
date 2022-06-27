@@ -10,7 +10,7 @@ import {
   getItemFromLocalStorage,
 } from '../utils'
 
-export const useAuth = () => {
+const useAuth = () => {
   return useContext(AuthContext)
 }
 
@@ -116,4 +116,4 @@ const useProvideAuth = () => {
   }
 }
 
-export default useProvideAuth
+export { useProvideAuth, useAuth }
