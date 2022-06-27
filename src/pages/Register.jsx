@@ -3,6 +3,7 @@ import { useFormInput } from '../hooks'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { useAuth } from '../hooks/useProvideAuth'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
   const name = useFormInput('')
@@ -11,6 +12,7 @@ const Register = () => {
   const confirm_password = useFormInput('')
   const [isRegistered, setIsRegistered] = useState(false)
   const auth = useAuth()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,6 +29,7 @@ const Register = () => {
     const response = await auth.signup(body)
 
     if (response.success) {
+      navigate('/login')
       toast.success(response.message)
     } else {
       toast.error(response.message)
