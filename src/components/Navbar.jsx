@@ -1,7 +1,9 @@
 import styles from '../styles/navbar.module.css'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../hooks/useProvideAuth'
 
 const Navbar = () => {
+  const auth = useAuth()
   return (
     <div className={styles.nav}>
       <div className={styles.leftDiv}>
@@ -15,27 +17,38 @@ const Navbar = () => {
         <span className={styles.logo}>Codial</span>
       </div>
       <div className={styles.rightNav}>
-        <div className={styles.user}>
-          <Link to='/user/profile'>
-            <img
-              src='https://cdn-icons-png.flaticon.com/512/4825/4825044.png'
-              alt='profile-pic'
-              className={styles.userDp}
-            />
-          </Link>
-          <span>Ratna</span>
-        </div>
+        {auth.user && (
+          <div className={styles.user}>
+            <Link to='/user/profile'>
+              <img
+                src='https://cdn-icons-png.flaticon.com/512/4825/4825044.png'
+                alt='profile-pic'
+                className={styles.userDp}
+              />
+            </Link>
+            <span>{auth.user.name}</span>
+          </div>
+        )}
+
         <div className={styles.navLinks}>
           <ul>
-            <li>
-              <Link to='/login'>Log In</Link>
-            </li>
-            <li>
-              <Link to='/logout'>Log Out</Link>
-            </li>
-            <li>
-              <Link to='/register'>Register</Link>
-            </li>
+            {auth.user ? (
+              <>
+                <li>
+                  <Link to='/logout'>Log Out</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to='/login'>Log In</Link>
+                </li>
+
+                <li>
+                  <Link to='/register'>Register</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
