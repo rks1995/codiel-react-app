@@ -8,8 +8,10 @@ const Login = () => {
   const email = useFormInput('')
   const password = useFormInput('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+
   const auth = useAuth()
   console.log(auth)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoggedIn(true)
@@ -25,6 +27,7 @@ const Login = () => {
     }
     setIsLoggedIn(false)
   }
+
   return (
     <form className={styles.loginForm} onSubmit={handleSubmit}>
       <span className={styles.loginSignupHeader}>Login</span>

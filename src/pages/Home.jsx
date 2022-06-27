@@ -1,9 +1,28 @@
+import { useEffect, useState } from 'react'
+import { getPosts } from '../api'
 import styles from '../styles/home.module.css'
 import PropTypes from 'prop-types'
 
 import Comments from '../components/Comments'
+import { Loader } from '../components'
 
-const Home = ({ posts }) => {
+const Home = (props) => {
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchPost() {
+      const response = await getPosts()
+      setPosts(response.data.posts)
+      setLoading(false)
+    }
+    fetchPost()
+  }, [])
+
+  if (loading) {
+    return <Loader />
+  }
+
   return (
     <div className={styles.postsList}>
       {posts.map((post) => {

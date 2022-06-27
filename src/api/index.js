@@ -56,4 +56,10 @@ const loginUser = (email, password) => {
   })
 }
 
-export { getPosts, loginUser }
+const getUserInfo = (id) => {
+  return customFetch(API_URLS.userInfo(id), {
+    method: 'get',
+  })
+}
+
+export { getPosts, loginUser, getUserInfo }
