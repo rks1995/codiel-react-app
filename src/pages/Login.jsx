@@ -15,9 +15,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoggedIn(true)
-    if (!email.value || !password.value) {
-      return toast.error('Invalid credential')
-    }
+
     const response = await auth.login(email.value, password.value)
 
     if (response.success) {

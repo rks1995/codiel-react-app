@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { loginUser } from '../api'
+import { loginUser, signupUser } from '../api'
 import { AuthContext } from '../providers/AuthProvider'
 import jwtDecode from 'jwt-decode'
 
@@ -31,18 +31,74 @@ const useProvideAuth = () => {
   }, [])
 
   const login = async (email, password) => {
-    const response = await loginUser(email.value, password.value)
-
-    if (response.success) {
-      setUser(response.data.user)
-      setItemInLocalStorage(LOCALSTORAGE_TOKEN_KEY, response.data.token && null)
+    if (!email || !password) {
       return {
-        success: true,
+        success: false,
+        message: 'Invalid email or password',
       }
     }
-    return {
-      success: false,
-      message: response.message,
+
+    try {
+      const response = await loginUser(email, password)
+
+      if (response.success) {
+        setUser(response.data.user)
+        setItemInLocalStorage(
+          LOCALSTORAGE_TOKEN_KEY,
+          response.data.token ? response.data.token : null
+        )
+        return {
+          success: true,
+          message: 'Successfully Logged In',
+        }
+      } else {
+        return {
+          success: false,
+          message: 'Invalid email or password',
+        }
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      }
+    }
+  }
+
+  const signup = async (body) => {
+    const { name, email, password, confirmPassword } = body
+
+    if (!name || !email || !password) {
+      return {
+        success: false,
+        message: 'provide name email or password',
+      }
+    }
+    if (password !== confirmPassword) {
+      return {
+        success: false,
+        message: 'password does not match',
+      }
+    }
+
+    try {
+      const response = await signupUser(body)
+
+      if (response.success) {
+        return {
+          success: true,
+          message: 'successfully signed up',
+        }
+      }
+      return {
+        success: false,
+        message: 'Invalid username or password',
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      }
     }
   }
 
@@ -55,6 +111,7 @@ const useProvideAuth = () => {
     user,
     loading,
     login,
+    signup,
     logout,
   }
 }

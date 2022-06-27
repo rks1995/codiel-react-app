@@ -4,7 +4,7 @@ const customFetch = async (url, { body, ...customConfig }) => {
   const token = window.localStorage.getItem(LOCALSTORAGE_TOKEN_KEY)
 
   const headers = {
-    'content-json': 'application/x-www-form-urlencoded',
+    'content-type': 'application/x-www-form-urlencoded',
   }
 
   if (token) {
@@ -22,7 +22,7 @@ const customFetch = async (url, { body, ...customConfig }) => {
   if (body) {
     config.body = getFormBody(body)
   }
-
+  console.log('body', config)
   try {
     const response = await fetch(url, config)
     const data = await response.json()
@@ -56,10 +56,17 @@ const loginUser = (email, password) => {
   })
 }
 
+const signupUser = (body) => {
+  const { name, email, password, confirmPassword } = body
+  return customFetch(API_URLS.signup(), {
+    method: 'post',
+    body: { name, email, password, confirm_password: confirmPassword },
+  })
+}
 const getUserInfo = (id) => {
   return customFetch(API_URLS.userInfo(id), {
     method: 'get',
   })
 }
 
-export { getPosts, loginUser, getUserInfo }
+export { getPosts, loginUser, getUserInfo, signupUser }
