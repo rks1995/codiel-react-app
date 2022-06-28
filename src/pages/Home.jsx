@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 
 import Comments from '../components/Comments'
 import { Loader } from '../components'
+import { Link } from 'react-router-dom'
 
 const Home = (props) => {
   const [posts, setPosts] = useState([])
@@ -35,7 +36,12 @@ const Home = (props) => {
                   alt='user-pic'
                 />
                 <div>
-                  <span className={styles.postAuthor}>{post.user.name}</span>
+                  <Link
+                    to={`/user/${post.user._id}`}
+                    className={styles.postAuthor}
+                  >
+                    {post.user.name}
+                  </Link>
                   <span className={styles.postTime}>a minute ago</span>
                 </div>
               </div>
