@@ -30,6 +30,7 @@ const useProvideAuth = () => {
     setLoading(false)
   }, [])
 
+  //  update user
   const updateUser = async (body) => {
     const response = await editProfile(body)
 
@@ -130,18 +131,25 @@ const useProvideAuth = () => {
     setUser(null)
   }
 
-  const getUserInfo = async (id) => {
-    const response = await getUser(id)
+  const getUserInfo = async ({ userId }) => {
+    try {
+      const response = await getUser(userId)
 
-    if (response.success) {
-      return {
-        success: true,
-        user: response.data.user,
+      if (response.success) {
+        return {
+          success: true,
+          user: response.data.user,
+        }
       }
-    }
-    return {
-      success: false,
-      message: response.message,
+      return {
+        success: false,
+        message: response.message,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      }
     }
   }
 

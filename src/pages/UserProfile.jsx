@@ -1,24 +1,46 @@
 import styles from '../styles/settings.module.css'
 import { useAuth } from '../hooks'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { Loader } from '../components'
+import toast from 'react-hot-toast'
 
 const UserProfile = () => {
-  const params = useParams()
-  const auth = useAuth()
   const [user, setUser] = useState({})
-
+  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
+  const userId = useParams()
+  const auth = useAuth()
+  console.log(auth)
   useEffect(() => {
     const getUser = async () => {
-      const response = await auth.getUserInfo(params.userId)
+      const response = await auth.getUserInfo(userId)
       if (response.success) {
         setUser(response.user)
       } else {
-        setUser({})
+        toast.error(response.message)
+        navigate('/')
       }
+      setLoading(false)
     }
     getUser()
-  }, []) // eslint-disable-next-line
+  }, [userId, auth, navigate])
+
+  if (loading) {
+    return <Loader />
+  }
+
+  const checkIfUserIsAFriend = () => {
+    const friends = auth.user.friendships
+
+    const index = friends.indexOf(userId.userId)
+
+    if (index !== -1) return true // user is a friend
+
+    return false
+  }
+
+  const showAddFriendBtn = checkIfUserIsAFriend()
 
   return (
     <div className={styles.settings}>
@@ -37,8 +59,11 @@ const UserProfile = () => {
         <div className={styles.fieldValue}>{user.name}</div>
       </div>
       <div className={styles.btnGrp}>
-        <button className={`button ${styles.editBtn}`}>Add Friend</button>
-        <button className={`button ${styles.editBtn}`}>Remove Friend</button>
+        {showAddFriendBtn ? (
+          <button className={`button ${styles.editBtn}`}>Remove Friend</button>
+        ) : (
+          <button className={`button ${styles.editBtn}`}>Add Friend</button>
+        )}
       </div>
     </div>
   )
