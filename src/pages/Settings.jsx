@@ -13,6 +13,8 @@ const Settings = () => {
   const [editMode, setEditMode] = useState(false)
 
   const updateProfile = async () => {
+    setSaveForm(true)
+
     const body = {
       userId: auth.user._id,
       name,
@@ -26,7 +28,6 @@ const Settings = () => {
     }
 
     const response = await auth.updateUser(body)
-    setSaveForm(true)
     if (response.success) {
       toast.success(response.message)
     } else {
