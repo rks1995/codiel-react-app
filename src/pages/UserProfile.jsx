@@ -32,7 +32,7 @@ const UserProfile = () => {
   }
 
   const checkIfUserIsAFriend = () => {
-    const friends = auth.user.friends
+    const { friends } = auth.user
 
     const friendIds = friends.map((friend) => friend.to_user._id)
 
@@ -45,23 +45,16 @@ const UserProfile = () => {
 
   const showAddFriendBtn = checkIfUserIsAFriend()
 
-  const addFriend = async (userId) => {
+  const updateFriend = async (addFriend) => {
     setRequestInProgress(true)
-    const response = await auth.addFriendship(userId)
-    if (response.success) {
-      toast.success(response.message)
-    } else {
-      toast.error(response.message)
-    }
-    setRequestInProgress(false)
-  }
-
-  const removeFriend = async (userId) => {
-    setRequestInProgress(true)
-    const response = await auth.removeFriendship(userId)
+    const response = await auth.updateFriendship(addFriend, user)
 
     if (response.success) {
-      toast.success(response.message)
+      if (addFriend) {
+        toast.success('Added friend successfully')
+      } else {
+        toast.success('Removed friend Successfully')
+      }
     } else {
       toast.error(response.message)
     }
@@ -87,7 +80,7 @@ const UserProfile = () => {
       <div className={styles.btnGrp}>
         {showAddFriendBtn ? (
           <button
-            onClick={() => removeFriend(user._id)}
+            onClick={() => updateFriend(false)}
             className={`button ${styles.editBtn}`}
             disabled={requestInProgress}
           >
@@ -95,7 +88,7 @@ const UserProfile = () => {
           </button>
         ) : (
           <button
-            onClick={() => addFriend(user._id)}
+            onClick={() => updateFriend(true)}
             className={`button ${styles.editBtn}`}
             disabled={requestInProgress}
           >

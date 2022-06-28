@@ -28,6 +28,7 @@ const useProvideAuth = () => {
 
   // set user from the token
   useEffect(() => {
+    console.log('useEffect')
     try {
       const getUserDetails = async () => {
         const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY)
@@ -49,7 +50,7 @@ const useProvideAuth = () => {
         error,
       }
     }
-  }, [user])
+  }, [])
 
   //  update user
   const updateUser = async (body) => {
@@ -92,6 +93,7 @@ const useProvideAuth = () => {
           LOCALSTORAGE_TOKEN_KEY,
           response.data.token ? response.data.token : null
         )
+        window.location.reload()
         return {
           success: true,
           message: 'Successfully Logged In',
@@ -174,30 +176,44 @@ const useProvideAuth = () => {
     }
   }
 
-  const addFriendship = async (userId) => {
-    const response = await addFriend(userId)
+  const updateFriendship = async (addingFriend, friend) => {
+    const { friends } = user
 
-    if (response.success) {
+    if (addingFriend) {
+      // add a friend to the user list
+      const response = await addFriend(friend._id)
+
+      if (response.success) {
+        setUser({
+          ...user,
+          friends: [...friends, response.data.friendship],
+        })
+        return {
+          success: true,
+        }
+      }
       return {
-        success: true,
-        message: 'Add Friend Successfully',
+        success: false,
+      }
+    } else {
+      //removing the friend from the user list
+      const response = await removeFriend(friend._id)
+
+      let newFriends = []
+      if (response.success) {
+        newFriends = friends.filter((f) => f.to_user._id !== friend._id)
+        setUser({
+          ...user,
+          friends: newFriends,
+        })
+        return {
+          success: true,
+        }
+      }
+      return {
+        success: false,
       }
     }
-
-    return response
-  }
-
-  const removeFriendship = async (userId) => {
-    const response = await removeFriend(userId)
-
-    if (response.success) {
-      return {
-        success: true,
-        message: 'Removed Friend successfully',
-      }
-    }
-
-    return response
   }
 
   return {
@@ -208,8 +224,7 @@ const useProvideAuth = () => {
     logout,
     updateUser,
     getUserInfo,
-    addFriendship,
-    removeFriendship,
+    updateFriendship,
   }
 }
 
