@@ -3,7 +3,7 @@ import { useFormInput } from '../hooks'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { useAuth } from '../hooks'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const Register = () => {
   const name = useFormInput('')
@@ -35,6 +35,10 @@ const Register = () => {
       toast.error(response.message)
     }
     setIsRegistered(false)
+  }
+
+  if (auth.user) {
+    return <Navigate to='/' />
   }
 
   return (

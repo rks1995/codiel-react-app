@@ -63,10 +63,19 @@ const signupUser = (body) => {
     body: { name, email, password, confirm_password: confirmPassword },
   })
 }
+
+const editProfile = (body) => {
+  const { userId, name, password, confirmPassword } = body
+  return customFetch(API_URLS.editUser(), {
+    method: 'post',
+    body: { id: userId, name, password, confirm_password: confirmPassword },
+  })
+}
+
 const getUserInfo = (id) => {
   return customFetch(API_URLS.userInfo(id), {
     method: 'get',
   })
 }
 
-export { getPosts, loginUser, getUserInfo, signupUser }
+export { getPosts, loginUser, getUserInfo, signupUser, editProfile }

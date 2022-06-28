@@ -3,14 +3,13 @@ import { useFormInput } from '../hooks'
 import { useState } from 'react'
 import { useAuth } from '../hooks'
 import toast from 'react-hot-toast'
+import { Navigate } from 'react-router-dom'
 
 const Login = () => {
   const email = useFormInput('')
   const password = useFormInput('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-
   const auth = useAuth()
-  console.log(auth)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -24,6 +23,10 @@ const Login = () => {
       toast.error(response.message)
     }
     setIsLoggedIn(false)
+  }
+
+  if (auth.user) {
+    return <Navigate to='/' />
   }
 
   return (

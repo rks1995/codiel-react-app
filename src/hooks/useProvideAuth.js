@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { loginUser, signupUser } from '../api'
+import { editProfile, loginUser, signupUser } from '../api'
 import { AuthContext } from '../providers/AuthProvider'
 import jwtDecode from 'jwt-decode'
 
@@ -29,6 +29,29 @@ const useProvideAuth = () => {
     }
     setLoading(false)
   }, [])
+
+  const updateUser = async (body) => {
+    const response = await editProfile(body)
+
+    console.log('response', response)
+
+    if (response.success) {
+      setUser(response.data.user)
+      setItemInLocalStorage(
+        LOCALSTORAGE_TOKEN_KEY,
+        response.data.token ? response.data.token : null
+      )
+      return {
+        success: true,
+        message: 'Profile Updated Successfully!',
+      }
+    } else {
+      return {
+        success: false,
+        message: 'Error In Updating profile',
+      }
+    }
+  }
 
   const login = async (email, password) => {
     if (!email || !password) {
@@ -113,6 +136,7 @@ const useProvideAuth = () => {
     login,
     signup,
     logout,
+    updateUser,
   }
 }
 

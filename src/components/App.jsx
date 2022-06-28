@@ -10,7 +10,7 @@ const Page404 = () => {
 
 function App() {
   const auth = useAuth()
-
+  console.log(auth)
   if (auth.loading) {
     return <Loader />
   }
