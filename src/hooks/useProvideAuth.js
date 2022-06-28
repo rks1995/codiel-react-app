@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { editProfile, loginUser, signupUser } from '../api'
+import { editProfile, loginUser, signupUser, getUser } from '../api'
 import { AuthContext } from '../providers/AuthProvider'
 import jwtDecode from 'jwt-decode'
 
@@ -130,6 +130,21 @@ const useProvideAuth = () => {
     setUser(null)
   }
 
+  const getUserInfo = async (id) => {
+    const response = await getUser(id)
+
+    if (response.success) {
+      return {
+        success: true,
+        user: response.data.user,
+      }
+    }
+    return {
+      success: false,
+      message: response.message,
+    }
+  }
+
   return {
     user,
     loading,
@@ -137,6 +152,7 @@ const useProvideAuth = () => {
     signup,
     logout,
     updateUser,
+    getUserInfo,
   }
 }
 

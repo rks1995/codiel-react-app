@@ -7,7 +7,7 @@ import Comments from '../components/Comments'
 import { Loader } from '../components'
 import { Link } from 'react-router-dom'
 
-const Home = (props) => {
+const Home = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
 

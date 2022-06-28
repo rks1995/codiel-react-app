@@ -22,7 +22,7 @@ const customFetch = async (url, { body, ...customConfig }) => {
   if (body) {
     config.body = getFormBody(body)
   }
-  console.log('body', config)
+
   try {
     const response = await fetch(url, config)
     const data = await response.json()
@@ -72,10 +72,10 @@ const editProfile = (body) => {
   })
 }
 
-const getUserInfo = (id) => {
+const getUser = (id) => {
   return customFetch(API_URLS.userInfo(id), {
     method: 'get',
   })
 }
 
-export { getPosts, loginUser, getUserInfo, signupUser, editProfile }
+export { getPosts, loginUser, getUser, signupUser, editProfile }

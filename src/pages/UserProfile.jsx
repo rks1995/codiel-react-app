@@ -1,10 +1,24 @@
 import styles from '../styles/settings.module.css'
 import { useAuth } from '../hooks'
-import { useState } from 'react'
-import toast from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 const UserProfile = () => {
-  const user = {}
+  const params = useParams()
+  const auth = useAuth()
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await auth.getUserInfo(params.userId)
+      if (response.success) {
+        setUser(response.user)
+      } else {
+        setUser({})
+      }
+    }
+    getUser()
+  }, []) // eslint-disable-next-line
 
   return (
     <div className={styles.settings}>
@@ -16,11 +30,11 @@ const UserProfile = () => {
       </div>
       <div className={styles.field}>
         <div className={styles.fieldLabel}>Email</div>
-        <div className={styles.fieldValue}>{user?.email}</div>
+        <div className={styles.fieldValue}>{user.email}</div>
       </div>
       <div className={styles.field}>
         <div className={styles.fieldLabel}>Name</div>
-        <div className={styles.fieldValue}>{user?.name}</div>
+        <div className={styles.fieldValue}>{user.name}</div>
       </div>
       <div className={styles.btnGrp}>
         <button className={`button ${styles.editBtn}`}>Add Friend</button>
