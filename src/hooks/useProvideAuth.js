@@ -1,5 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
-import { editProfile, loginUser, signupUser, getUser } from '../api'
+import {
+  editProfile,
+  loginUser,
+  signupUser,
+  getUser,
+  addFriend,
+  fetchUserFriends,
+  removeFriend,
+} from '../api'
 import { AuthContext } from '../providers/AuthProvider'
 import jwtDecode from 'jwt-decode'
 
@@ -20,15 +28,28 @@ const useProvideAuth = () => {
 
   // set user from the token
   useEffect(() => {
-    const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY)
-
-    if (userToken) {
-      // decode the token
-      const userInfo = jwtDecode(userToken)
-      setUser(userInfo)
+    try {
+      const getUserDetails = async () => {
+        const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY)
+        if (userToken) {
+          // decode the token
+          const userInfo = jwtDecode(userToken)
+          const response = await fetchUserFriends()
+          let friends = []
+          if (response.success) {
+            friends = response.data.friends
+          }
+          setUser({ ...userInfo, friends })
+        }
+        setLoading(false)
+      }
+      getUserDetails()
+    } catch (error) {
+      return {
+        error,
+      }
     }
-    setLoading(false)
-  }, [])
+  }, [user])
 
   //  update user
   const updateUser = async (body) => {
@@ -153,6 +174,32 @@ const useProvideAuth = () => {
     }
   }
 
+  const addFriendship = async (userId) => {
+    const response = await addFriend(userId)
+
+    if (response.success) {
+      return {
+        success: true,
+        message: 'Add Friend Successfully',
+      }
+    }
+
+    return response
+  }
+
+  const removeFriendship = async (userId) => {
+    const response = await removeFriend(userId)
+
+    if (response.success) {
+      return {
+        success: true,
+        message: 'Removed Friend successfully',
+      }
+    }
+
+    return response
+  }
+
   return {
     user,
     loading,
@@ -161,6 +208,8 @@ const useProvideAuth = () => {
     logout,
     updateUser,
     getUserInfo,
+    addFriendship,
+    removeFriendship,
   }
 }
 

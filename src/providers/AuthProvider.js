@@ -8,6 +8,8 @@ const initialState = {
   signup: () => {},
   updateUser: () => {},
   getUserInfo: () => {},
+  addFriendship: () => {},
+  removeFriendship: () => {},
   loading: true,
 }
 

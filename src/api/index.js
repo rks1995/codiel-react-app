@@ -77,5 +77,29 @@ const getUser = (id) => {
     method: 'get',
   })
 }
+const fetchUserFriends = () => {
+  return customFetch(API_URLS.friends(), {
+    method: 'get',
+  })
+}
+const addFriend = (userId) => {
+  return customFetch(API_URLS.createFriendship(userId), {
+    method: 'post',
+  })
+}
+const removeFriend = (userId) => {
+  return customFetch(API_URLS.removeFriend(userId), {
+    method: 'post',
+  })
+}
 
-export { getPosts, loginUser, getUser, signupUser, editProfile }
+export {
+  getPosts,
+  loginUser,
+  getUser,
+  signupUser,
+  editProfile,
+  addFriend,
+  fetchUserFriends,
+  removeFriend,
+}
