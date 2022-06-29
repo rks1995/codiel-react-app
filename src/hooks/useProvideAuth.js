@@ -28,42 +28,52 @@ const useProvideAuth = () => {
 
   // set user from the token
   useEffect(() => {
-    console.log('useEffect')
-    try {
-      const getUserDetails = async () => {
-        const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY)
-        if (userToken) {
-          // decode the token
-          const userInfo = jwtDecode(userToken)
-          const response = await fetchUserFriends()
-          let friends = []
-          if (response.success) {
-            friends = response.data.friends
-          }
-          setUser({ ...userInfo, friends })
-        }
-        setLoading(false)
-      }
+    // console.log(typeof getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY))
+    if (getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY) !== 'null') {
       getUserDetails()
-    } catch (error) {
-      return {
-        error,
-      }
+    } else {
+      console.log('useEffect')
+      logout()
     }
+    setLoading(false)
   }, [])
+
+  const getUserDetails = async () => {
+    console.log('call')
+    const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY)
+    if (userToken) {
+      // decode the token
+      const userInfo = jwtDecode(userToken)
+      const response = await fetchUserFriends()
+      let friends = []
+      if (response.success) {
+        friends = response.data.friends
+      }
+      setLoading(false)
+      setUser({ ...userInfo, friends })
+    } else {
+      setUser(null)
+    }
+  }
 
   //  update user
   const updateUser = async (body) => {
+    console.log(body)
+    if (body.name === user.name || body.password === user.password) {
+      return {
+        success: true,
+        message: 'Profile Update Successfully',
+      }
+    }
     const response = await editProfile(body)
-
     console.log('response', response)
-
     if (response.success) {
-      setUser(response.data.user)
+      // setUser(response.data.user)
       setItemInLocalStorage(
         LOCALSTORAGE_TOKEN_KEY,
         response.data.token ? response.data.token : null
       )
+      getUserDetails()
       return {
         success: true,
         message: 'Profile Updated Successfully!',
@@ -88,12 +98,12 @@ const useProvideAuth = () => {
       const response = await loginUser(email, password)
 
       if (response.success) {
-        setUser(response.data.user)
+        // setUser(response.data.user)
         setItemInLocalStorage(
           LOCALSTORAGE_TOKEN_KEY,
           response.data.token ? response.data.token : null
         )
-        window.location.reload()
+        getUserDetails()
         return {
           success: true,
           message: 'Successfully Logged In',
