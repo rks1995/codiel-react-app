@@ -32,7 +32,6 @@ const useProvideAuth = () => {
     if (getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY) !== 'null') {
       getUserDetails()
     } else {
-      console.log('useEffect')
       logout()
     }
     setLoading(false)
