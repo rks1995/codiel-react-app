@@ -219,6 +219,7 @@
   justify-content: flex-end;
 }
 .createPost textarea {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   height: 90px;
   padding: 10px;
   width: 100%;

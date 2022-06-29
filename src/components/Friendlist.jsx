@@ -4,7 +4,6 @@ import styles from '../styles/home.module.css'
 
 const Friendlist = () => {
   const auth = useAuth()
-  console.log(auth)
   const { friends = [] } = auth.user
   return (
     <div className={styles.friendsList}>

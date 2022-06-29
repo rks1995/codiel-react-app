@@ -8,7 +8,7 @@ import {
   fetchUserFriends,
   removeFriend,
 } from '../api'
-import { AuthContext } from '../providers/AuthProvider'
+import { AuthContext } from '../providers'
 import jwtDecode from 'jwt-decode'
 
 import {

@@ -1,25 +1,15 @@
-import { useEffect, useState } from 'react'
-import { getPosts } from '../api'
-import styles from '../styles/home.module.css'
-import PropTypes from 'prop-types'
+import { useAuth, usePosts } from '../hooks'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../hooks'
 import { CreatePost, Comments, Friendlist, Loader } from '../components'
 
-const Home = () => {
-  const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const auth = useAuth()
-  useEffect(() => {
-    async function fetchPost() {
-      const response = await getPosts()
-      setPosts(response.data.posts)
-      setLoading(false)
-    }
-    fetchPost()
-  }, [])
+import styles from '../styles/home.module.css'
+import PropTypes from 'prop-types'
 
-  if (loading) {
+const Home = () => {
+  const posts = usePosts()
+  const auth = useAuth()
+
+  if (posts.loading) {
     return <Loader />
   }
 
@@ -27,7 +17,7 @@ const Home = () => {
     <div className={styles.home}>
       <div className={styles.postsList}>
         <CreatePost />
-        {posts.map((post) => {
+        {posts.data.map((post) => {
           return (
             <div key={post._id} className={styles.postWrapper}>
               <div className={styles.postHeader}>
@@ -85,7 +75,7 @@ const Home = () => {
 }
 
 Home.propTypes = {
-  posts: PropTypes.array.isRequired,
+  posts: PropTypes.array,
 }
 
 export default Home
