@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react'
 import { getPosts } from '../api'
 import styles from '../styles/home.module.css'
 import PropTypes from 'prop-types'
-
-import Comments from '../components/Comments'
-import { Friendlist, Loader } from '../components'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks'
+import { CreatePost, Comments, Friendlist, Loader } from '../components'
 
 const Home = () => {
   const [posts, setPosts] = useState([])
@@ -28,6 +26,7 @@ const Home = () => {
   return (
     <div className={styles.home}>
       <div className={styles.postsList}>
+        <CreatePost />
         {posts.map((post) => {
           return (
             <div key={post._id} className={styles.postWrapper}>
