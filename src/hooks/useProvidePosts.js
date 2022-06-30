@@ -24,10 +24,22 @@ const useProvidePosts = () => {
     setLoading(false)
   }
 
+  const addCommentsToState = (comment, postId) => {
+    const newPosts = posts.map((post) => {
+      if (post._id === postId) {
+        return { ...post, comments: [...post.comments, comment] }
+      }
+      return post
+    })
+    setPosts(newPosts)
+    setLoading(false)
+  }
+
   return {
     data: posts,
     loading,
     addPostToState,
+    addCommentsToState,
   }
 }
 

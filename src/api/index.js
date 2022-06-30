@@ -99,6 +99,14 @@ const addPost = (content) => {
   })
 }
 
+const addComment = (content, postId) => {
+  console.log(content, postId)
+  return customFetch(API_URLS.comment(), {
+    method: 'post',
+    body: { post_id: postId, content },
+  })
+}
+
 export {
   getPosts,
   loginUser,
@@ -109,4 +117,5 @@ export {
   fetchUserFriends,
   removeFriend,
   addPost,
+  addComment,
 }
