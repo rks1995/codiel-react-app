@@ -1,12 +1,25 @@
 import styles from '../styles/navbar.module.css'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { searchUsers } from '../api'
 
 const Navbar = () => {
   const auth = useAuth()
   const [searchInput, setSearchInput] = useState('')
-  const [result, setResult] = useState([{ _id: 1, name: 'Ratna004' }])
+  const [result, setResult] = useState([])
+
+  useEffect(() => {
+    const handleSearch = async () => {
+      const response = await searchUsers(searchInput)
+      if (response.success) {
+        setResult(response.data.users)
+      } else {
+        setResult([])
+      }
+    }
+    handleSearch()
+  }, [searchInput])
 
   return (
     <div className={styles.nav}>
@@ -25,6 +38,7 @@ const Navbar = () => {
           className={styles.searchIcon}
           src='https://cdn-icons-png.flaticon.com/512/54/54481.png'
           alt='searchIcon'
+          // onClick={handleSearch}
         />
         <input
           type='text'

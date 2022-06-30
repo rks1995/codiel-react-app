@@ -111,6 +111,11 @@ const toggleLikes = (itemId, itemType) => {
     method: 'post',
   })
 }
+const searchUsers = (userName) => {
+  return customFetch(API_URLS.searchUsers(userName), {
+    method: 'get',
+  })
+}
 export {
   getPosts,
   loginUser,
@@ -123,4 +128,5 @@ export {
   addPost,
   addComment,
   toggleLikes,
+  searchUsers,
 }
