@@ -20,7 +20,6 @@ const UserProfile = () => {
         setUser(response.user)
       } else {
         toast.error(response.message)
-        navigate('/')
       }
       setLoading(false)
     }

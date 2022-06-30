@@ -26,7 +26,6 @@ const useProvideAuth = () => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // set user from the token
   useEffect(() => {
     // console.log(typeof getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY))
     if (getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY) !== 'null') {
@@ -34,7 +33,6 @@ const useProvideAuth = () => {
     } else {
       logout()
     }
-    setLoading(false)
   }, [])
 
   const getUserDetails = async () => {

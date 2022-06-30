@@ -11,6 +11,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleSearch = async () => {
+      if (!searchInput) {
+        setResult([])
+        return
+      }
       const response = await searchUsers(searchInput)
       if (response.success) {
         setResult(response.data.users)
