@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import { Comments } from './'
 import { Link } from 'react-router-dom'
-import { addComment } from '../api'
+import { addComment, toggleLikes } from '../api'
 import toast from 'react-hot-toast'
 import styles from '../styles/home.module.css'
-import { usePosts } from '../hooks'
+import { usePosts, useAuth } from '../hooks'
 
 const Post = ({ post }) => {
   const [commentText, setCommentText] = useState('')
+  const [commentInProgess, setCommentInProgress] = useState(false)
   const posts = usePosts()
+  const auth = useAuth()
 
   const handleComment = async (e) => {
     if (e.key === 'Enter') {
+      setCommentInProgress(true)
       console.log('handle...')
       const response = await addComment(commentText, post._id)
       console.log(response)
@@ -22,6 +25,29 @@ const Post = ({ post }) => {
       } else {
         toast.error(response.message)
       }
+    }
+    setCommentInProgress(false)
+  }
+
+  const likePost = async () => {
+    console.log('toggleLike')
+
+    const response = await toggleLikes(post._id, 'Post')
+    console.log(response)
+    if (response.success) {
+      if (response.data.deleted) {
+        posts.updatePostLikesToState(post._id, auth.user._id, true)
+        toast.success('Post disliked !', {
+          icon: '👎',
+        })
+        return
+      }
+      posts.updatePostLikesToState(post._id, auth.user._id, false)
+      toast.success('Post Liked!', {
+        icon: '👍',
+      })
+    } else {
+      toast.error(response.message)
     }
   }
 
@@ -47,6 +73,7 @@ const Post = ({ post }) => {
             <img
               src='https://cdn-icons-png.flaticon.com/512/1077/1077035.png'
               alt='likes-icon'
+              onClick={likePost}
             />
             <span>{post.likes.length}</span>
           </div>
@@ -65,6 +92,7 @@ const Post = ({ post }) => {
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             onKeyUp={handleComment}
+            disabled={commentInProgess}
           />
         </div>
         <div className={styles.postCommentsList}>

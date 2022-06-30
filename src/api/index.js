@@ -100,13 +100,17 @@ const addPost = (content) => {
 }
 
 const addComment = (content, postId) => {
-  console.log(content, postId)
   return customFetch(API_URLS.comment(), {
     method: 'post',
     body: { post_id: postId, content },
   })
 }
 
+const toggleLikes = (itemId, itemType) => {
+  return customFetch(API_URLS.toggleLike(itemId, itemType), {
+    method: 'post',
+  })
+}
 export {
   getPosts,
   loginUser,
@@ -118,4 +122,5 @@ export {
   removeFriend,
   addPost,
   addComment,
+  toggleLikes,
 }

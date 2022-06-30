@@ -12,7 +12,6 @@ const CreatePost = () => {
   const handleAddPost = async () => {
     setAddingPost(true)
     const response = await addPost(post)
-    console.log(response)
     if (response.success) {
       setPost('')
       posts.addPostToState(response.data.post)

@@ -34,12 +34,36 @@ const useProvidePosts = () => {
     setPosts(newPosts)
     setLoading(false)
   }
+  const updatePostLikesToState = (postId, userId, deleted) => {
+    let newPosts = []
+    if (deleted) {
+      newPosts = posts.map((post) => {
+        if (post._id === postId) {
+          console.log(userId)
+          let newLikes = post.likes.filter((user) => user !== userId)
+          return { ...post, likes: newLikes }
+        }
+        return post
+      })
+      console.log(newPosts)
+    } else {
+      newPosts = posts.map((post) => {
+        if (post._id === postId) {
+          return { ...post, likes: [...post.likes, userId] }
+        }
+        return post
+      })
+    }
+
+    setPosts(newPosts)
+  }
 
   return {
     data: posts,
     loading,
     addPostToState,
     addCommentsToState,
+    updatePostLikesToState,
   }
 }
 
