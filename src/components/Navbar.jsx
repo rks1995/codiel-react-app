@@ -1,9 +1,13 @@
 import styles from '../styles/navbar.module.css'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks'
+import { useState } from 'react'
 
 const Navbar = () => {
   const auth = useAuth()
+  const [searchInput, setSearchInput] = useState('')
+  const [result, setResult] = useState([{ _id: 1, name: 'Ratna004' }])
+
   return (
     <div className={styles.nav}>
       <div className={styles.leftDiv}>
@@ -15,6 +19,38 @@ const Navbar = () => {
           />
         </Link>
         <span className={styles.logo}>Codial</span>
+      </div>
+      <div className={styles.searchContainer}>
+        <img
+          className={styles.searchIcon}
+          src='https://cdn-icons-png.flaticon.com/512/54/54481.png'
+          alt='searchIcon'
+        />
+        <input
+          type='text'
+          placeholder='Search users'
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        {result.length > 0 && (
+          <div className={styles.searchResults}>
+            <ul>
+              {result.map((user) => {
+                return (
+                  <li className={styles.searchResultsRow} key={user._id}>
+                    <Link to={`/user/${user._id}`}>
+                      <img
+                        src='https://cdn-icons-png.flaticon.com/512/4825/4825044.png'
+                        alt=''
+                      />
+                      <span>{user.name}</span>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        )}
       </div>
       <div className={styles.rightNav}>
         {auth.user && (
